@@ -5,11 +5,31 @@ import org.junit.Test;
 import java.util.Arrays;
 
 /**
- * Given a sorted array of distinct integers and a target value,
- * return the index if the target is found. If not, return the index
- * where it would be if it were inserted in order.
+ * <a href="https://leetcode.com/problems/search-insert-position/">https://leetcode.com/problems/search-insert-position/</a>
+ * <p>
+ * 35. Search Insert Position
+ * <p>
+ * Given a sorted array of distinct integers and a target value, return the index if the target is found.
+ * If not, return the index where it would be if it were inserted in order.
  * <p>
  * You must write an algorithm with O(log n) runtime complexity.
+ * <p>
+ * <p>
+ * <p>
+ * Example 1:
+ * <p>
+ * Input: nums = [1,3,5,6], target = 5
+ * Output: 2
+ * <p>
+ * Example 2:
+ * <p>
+ * Input: nums = [1,3,5,6], target = 2
+ * Output: 1
+ * <p>
+ * Example 3:
+ * <p>
+ * Input: nums = [1,3,5,6], target = 7
+ * Output: 4
  */
 public class SearchInsertPositionTest {
 
@@ -80,28 +100,24 @@ public class SearchInsertPositionTest {
     }
 
     public static int searchInsert(int[] nums, int target) {
-        return searchInsert(nums, 0, nums.length, target);
-    }
-
-    private static int searchInsert(int[] nums, int start, int end, int target) {
-
-        if (start == end) {
-            return end;
+        if (nums[0] >= target) {
+            return 0;
         }
-        if (start + 1 == end) {
-            int startValue = nums[start];
-            return startValue >= target? start : end;
+        int size = nums.length;
+        if (nums[size - 1] < target) {
+            return size;
         }
-
-        int middleIndex = start + (end - start) / 2;
-        int middleValue = nums[middleIndex];
-
-        if (middleValue > target) {
-            return searchInsert(nums, start, middleIndex, target);
-        } else if (middleValue < target) {
-            return searchInsert(nums, middleIndex, end, target);
-        } else {
-            return middleIndex;
+        int left = 0;
+        int right = size - 1;
+        while (left + 1 < right) {
+            int middleIndex = left + (right - left) / 2;
+            int middleValue = nums[middleIndex];
+            if (middleValue >= target) {
+                right = middleIndex;
+            } else {
+                left = middleIndex;
+            }
         }
+        return right;
     }
 }
