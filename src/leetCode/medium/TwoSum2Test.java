@@ -5,9 +5,16 @@ import org.junit.Test;
 import java.util.Arrays;
 
 /**
- * Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, find two numbers such that they add up to a specific target number. Let these two numbers be numbers[index1] and numbers[index2] where 1 <= index1 < index2 <= numbers.length.
+ * <a href="https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/">https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/</a>
  * <p>
- * Return the indices of the two numbers, index1 and index2, added by one as an integer array [index1, index2] of length 2.
+ * 167. Two Sum II - Input Array Is Sorted
+ * <p>
+ * Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order,
+ * find two numbers such that they add up to a specific target number. Let these two numbers
+ * be numbers[index1] and numbers[index2] where 1 <= index1 < index2 <= numbers.length.
+ * <p>
+ * Return the indices of the two numbers, index1 and index2, added by one as an integer array [index1, index2]
+ * of length 2.
  * <p>
  * The tests are generated such that there is exactly one solution. You may not use the same element twice.
  * <p>
@@ -59,6 +66,38 @@ public class TwoSum2Test {
         test(input, target, expected);
     }
 
+    @Test
+    public void test4() {
+        int[] input = {2, 7, 11, 15, 16, 18, 21, 23, 25, 30, 32, 36, 38};
+        int target = 37;
+        int[] expected = {2, 10};
+        test(input, target, expected);
+    }
+
+    @Test
+    public void test5() {
+        int[] input = {2, 7, 11, 15, 16, 18, 21, 23, 25, 30, 33, 36, 38};
+        int target = 39;
+        int[] expected = {5, 8};
+        test(input, target, expected);
+    }
+
+    @Test
+    public void test6() {
+        int[] input = {2, 7, 11, 15, 16, 18, 21, 23, 25, 30, 33, 36, 38};
+        int target = 9;
+        int[] expected = {1, 2};
+        test(input, target, expected);
+    }
+
+    @Test
+    public void test7() {
+        int[] input = {2, 7, 11, 15, 16, 18, 21, 23, 25, 30, 33, 36, 38};
+        int target = 69;
+        int[] expected = {11, 12};
+        test(input, target, expected);
+    }
+
     private static void test(int[] input, int target, int[] expected) {
         System.out.println("input: " + Arrays.toString(input));
         System.out.println("target: " + target);
@@ -66,7 +105,6 @@ public class TwoSum2Test {
         int[] actual = twoSum(input, target);
         System.out.println("  actual: " + Arrays.toString(actual));
         assert Arrays.equals(actual, expected);
-
     }
 
     private static int[] twoSum(int[] numbers, int target) {
@@ -75,19 +113,49 @@ public class TwoSum2Test {
         int right = numbers.length - 1;
         int leftValue = numbers[left];
         int rightValue = numbers[right];
-        while (left < right) {
-            int sum = leftValue + rightValue;
-            if (sum == target) {
-                break;
-            }
+        int sum = leftValue + rightValue;
+        while (sum != target) {
+            int middle = left + (right - left) / 2;
+            int middleValue = numbers[middle];
             if (sum > target) {
-                rightValue = numbers[--right];
+                while (true) {
+                    int middleSum = leftValue + middleValue;
+                    if (middleSum > target) {
+                        right = middle;
+                        rightValue = middleValue;
+                        break;
+                    } else if (middleSum < target) {
+                        if (middle + 1 == right) {
+                            rightValue = numbers[--right];
+                            break;
+                        }
+                        middle = middle + (right - middle) / 2;
+                        middleValue = numbers[middle];
+                    } else {
+                        return new int[]{left + 1, middle + 1};
+                    }
+                }
             } else {
-                leftValue = numbers[++left];
+                while (true) {
+                    int middleSum = middleValue + rightValue;
+                    if (middleSum < target) {
+                        left = middle;
+                        leftValue = middleValue;
+                        break;
+                    } else if (middleSum > target) {
+                        if (left + 1 == middle) {
+                            leftValue = numbers[++left];
+                            break;
+                        }
+                        middle = left + (middle - left) / 2;
+                        middleValue = numbers[middle];
+                    } else {
+                        return new int[]{middle + 1, right + 1};
+                    }
+                }
             }
+            sum = leftValue + rightValue;
         }
         return new int[]{left + 1, right + 1};
     }
-
-
 }
