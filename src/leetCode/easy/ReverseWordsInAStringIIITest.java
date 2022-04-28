@@ -2,11 +2,11 @@ package leetCode.easy;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
+ * <a href="https://leetcode.com/problems/reverse-words-in-a-string-iii/">https://leetcode.com/problems/reverse-words-in-a-string-iii/</a>
+ * <p>
+ * 557. Reverse Words in a String III
+ * <p>
  * Given a string s, reverse the order of characters in each word within a sentence while still preserving whitespace and initial word order.
  * <p>
  * <p>
@@ -21,7 +21,7 @@ import java.util.List;
  * Input: s = "God Ding"
  * Output: "doG gniD"
  */
-public class ReverseWordsInStringTest {
+public class ReverseWordsInAStringIIITest {
 
     @Test
     public void test1() {
