@@ -2,14 +2,42 @@ package leetCode.medium;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-
 /**
- * Given a string s, find the length of the longest substring without repeating characters.
- *
  * <a href="https://leetcode.com/problems/longest-substring-without-repeating-characters/">https://leetcode.com/problems/longest-substring-without-repeating-characters/</a>
+ * <p>
+ * 3. Longest Substring Without Repeating Characters
+ * <p>
+ * Given a string s, find the length of the longest substring without repeating characters.
+ * <p>
+ * <p>
+ * <p>
+ * Example 1:
+ * <p>
+ * Input: s = "abcabcbb"
+ * Output: 3
+ * Explanation: The answer is "abc", with the length of 3.
+ * <p>
+ * Example 2:
+ * <p>
+ * Input: s = "bbbbb"
+ * Output: 1
+ * Explanation: The answer is "b", with the length of 1.
+ * <p>
+ * Example 3:
+ * <p>
+ * Input: s = "pwwkew"
+ * Output: 3
+ * Explanation: The answer is "wke", with the length of 3.
+ * Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
+ * <p>
+ * <p>
+ * <p>
+ * Constraints:
+ * <p>
+ * 0 <= s.length <= 5 * 104
+ * s consists of English letters, digits, symbols and spaces.
  */
-public class LongestSubstringTest {
+public class LongestSubstringWithoutRepeatingCharactersTest {
 
     @Test
     public void test1() {
@@ -42,34 +70,24 @@ public class LongestSubstringTest {
 
     public static int lengthOfLongestSubstring(String s) {
 
-        int start = 0;
-        int end = 0;
-
         char[] chars = s.toCharArray();
-
         int result = 0;
-
+        int start = 0;
         for (int i = 0; i < chars.length; i++) {
             char c = chars[i];
-            boolean found = false;
-            for (int j = start; j < end; j++) {
+            for (int j = start; j < i; j++) {
                 if (chars[j] == c) {
-                    found = true;
+                    int length = i - start;
+                    if (length > result) {
+                        result = length;
+                    }
                     start = j + 1;
-                    end = i + 1;
                     break;
                 }
             }
-            if (!found) {
-                end = i + 1;
-                int length = end - start;
-                if (length > result) {
-                    result = length;
-                }
-            }
         }
-
-        return result;
+        int length = chars.length - start;
+        return Math.max(length, result);
     }
 
 
