@@ -107,49 +107,46 @@ public class SearchInRotatedSortedArrayTest {
             return -1;
         }
         int pivotIndex = getPivotIndex(nums);
-        return search(nums, 0, nums.length - 1, target, pivotIndex);
+        return search(nums, target, pivotIndex);
     }
 
     private static int getPivotIndex(int[] nums) {
-        int size = nums.length;
-        if (nums[size - 1] >= nums[0]) {
+        int start = 0;
+        int end = nums.length - 1;
+        if (nums[end] >= nums[start]) {
             return 0;
         }
-        return getPivotIndex(nums, 0, size - 1);
-    }
-
-    /**
-     * Contract: nums[end] < nums[start]
-     */
-    private static int getPivotIndex(int[] nums, int start, int end) {
-        if (start + 1 == end) {
-            return end;
+        while (start + 1 < end) {
+            int m = (start + end) / 2;
+            if (nums[m] < nums[start]) {
+                end = m;
+            } else {
+                start = m;
+            }
         }
-        int m = (start + end) / 2;
-        if (nums[m] < nums[start]) {
-            return getPivotIndex(nums, start, m);
-        } else {
-            return getPivotIndex(nums, m, end);
-        }
+        return end;
     }
 
     private static int rotatedIndex(int size, int pivotIndex, int index) {
         return index >= (size - pivotIndex) ? index - (size - pivotIndex) : index + pivotIndex;
     }
 
-    private static int search(int[] nums, int start, int end, int target, int pivot) {
-        if (end - start < 0) {
-            return -1;
+    public static int search(int[] nums, int target, int pivot) {
+        int start = 0;
+        int end = nums.length - 1;
+
+        while (start <= end) {
+            int m = (start + end) / 2;
+            int rm = rotatedIndex(nums.length, pivot, m);
+            int mv = nums[rm];
+            if (mv > target) {
+                end = m - 1;
+            } else if (mv < target) {
+                start = m + 1;
+            } else {
+                return rm;
+            }
         }
-        int m = (start + end) / 2;
-        int rm = rotatedIndex(nums.length, pivot, m);
-        int mv = nums[rm];
-        if (mv > target) {
-            return search(nums, start, m - 1, target, pivot);
-        } else if (mv < target) {
-            return search(nums, m + 1, end, target, pivot);
-        } else {
-            return rm;
-        }
+        return -1;
     }
 }
