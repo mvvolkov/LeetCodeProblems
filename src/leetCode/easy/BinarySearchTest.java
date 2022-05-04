@@ -60,21 +60,19 @@ public class BinarySearchTest {
     }
 
     public static int search(int[] nums, int target) {
-        return search(nums, 0, nums.length - 1, target);
-    }
-
-    private static int search(int[] nums, int start, int end, int target) {
-        if (end - start < 0) {
-            return -1;
+        int start = 0;
+        int end = nums.length - 1;
+        while (start <= end) {
+            int m = (start + end) / 2;
+            int mv = nums[m];
+            if (mv > target) {
+                end = m - 1;
+            } else if (mv < target) {
+                start = m + 1;
+            } else {
+                return m;
+            }
         }
-        int middleIndex = (start + end) / 2;
-        int middleValue = nums[middleIndex];
-        if (middleValue > target) {
-            return search(nums, start, middleIndex - 1, target);
-        } else if (middleValue < target) {
-            return search(nums, middleIndex + 1, end, target);
-        } else {
-            return middleIndex;
-        }
+        return -1;
     }
 }
