@@ -5,6 +5,10 @@ import org.junit.Test;
 import java.util.Arrays;
 
 /**
+ * <a href="https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/submissions/">https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/submissions/</a>
+ * <p>
+ * 34. Find First and Last Position of Element in Sorted Array
+ * <p>
  * Given an array of integers nums sorted in non-decreasing order,
  * find the starting and ending position of a given target value.
  * <p>
@@ -38,7 +42,7 @@ import java.util.Arrays;
  * nums is a non-decreasing array.
  * -109 <= target <= 109
  */
-public class FirstAndLastPositionInSortedArrayTest {
+public class FindFirstAndLastPositionOfElementInSortedArrayTest {
 
     @Test
     public void test1() {
