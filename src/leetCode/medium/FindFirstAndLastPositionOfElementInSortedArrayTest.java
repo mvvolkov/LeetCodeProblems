@@ -116,6 +116,14 @@ public class FindFirstAndLastPositionOfElementInSortedArrayTest {
         test(input, target, expected);
     }
 
+    @Test
+    public void test10() {
+        int[] input = {2, 2, 2, 2, 2, 2, 2};
+        int target = 2;
+        int[] expected = {0, 6};
+        test(input, target, expected);
+    }
+
     private static void test(int[] input, int target, int[] expected) {
         System.out.println("input:  " + Arrays.toString(input));
         System.out.println("target = " + target);
@@ -127,55 +135,60 @@ public class FindFirstAndLastPositionOfElementInSortedArrayTest {
 
 
     public static int[] searchRange(int[] nums, int target) {
-        if (nums.length == 0) {
+        return searchRange(nums, 0, nums.length - 1, target);
+    }
+
+    /**
+     * Usual binary search as in {@link leetCode.easy.BinarySearchTest} with extra handling
+     * for the found index.
+     */
+    private static int[] searchRange(int[] nums, int start, int end, int target) {
+        if (end - start < 0) {
             return new int[]{-1, -1};
         }
-        return searchRange(nums, target, 0, nums.length - 1);
-    }
-
-    private static int[] searchRange(int[] nums, int target, int i1, int i2) {
-
-        if (i2 - i1 < 2) {
-            int v1 = nums[i1];
-            int v2 = nums[i2];
-            if (v1 == target) {
-                return v2 == target ? new int[]{i1, i2} : new int[]{i1, i1};
-            } else if (v2 == target) {
-                return new int[]{i2, i2};
-            } else {
-                return new int[]{-1, -1};
-            }
-        }
-
-        int m = i1 + (i2 - i1) / 2;
+        int m = (start + end) / 2;
         int vm = nums[m];
         if (vm > target) {
-            return searchRange(nums, target, i1, m);
+            return searchRange(nums, start, m - 1, target);
         } else if (vm < target) {
-            return searchRange(nums, target, m, i2);
+            return searchRange(nums, m + 1, end, target);
         } else {
-            i1 = nums[i1] == target ? i1 : getStart(nums, target, i1, m, true);
-            i2 = nums[i2] == target ? i2 : getStart(nums, target, m, i2, false);
-            return new int[]{i1, i2};
+            // if the target value found then find the start and the end of the range
+            start = nums[start] == target ? start : getLeftEnd(nums, target, start, m);
+            end = nums[end] == target ? end : getRightEnd(nums, target, m, end);
+            return new int[]{start, end};
         }
     }
 
-    private static int getStart(int[] nums, int target, int i1, int i2, boolean left) {
+    /**
+     * Contract: nums[i1] != target, nums[i2] == target
+     */
+    private static int getLeftEnd(int[] nums, int target, int i1, int i2) {
         if (i1 + 1 == i2) {
-            return left ? i2 : i1;
+            return i2;
         }
         int m = i1 + (i2 - i1) / 2;
         int vm = nums[m];
         if (vm < target) {
-            return getStart(nums, target, m, i2, left);
-        } else if (vm > target) {
-            return getStart(nums, target, i1, m, left);
+            return getLeftEnd(nums, target, m, i2);
         } else {
-            if (left) {
-                return getStart(nums, target, i1, m, left);
-            } else {
-                return getStart(nums, target, m, i2, left);
-            }
+            return getLeftEnd(nums, target, i1, m);
+        }
+    }
+
+    /**
+     * Contract: nums[i1] == target, nums[i2] != target
+     */
+    private static int getRightEnd(int[] nums, int target, int i1, int i2) {
+        if (i1 + 1 == i2) {
+            return i1;
+        }
+        int m = i1 + (i2 - i1) / 2;
+        int vm = nums[m];
+        if (vm > target) {
+            return getRightEnd(nums, target, i1, m);
+        } else {
+            return getRightEnd(nums, target, m, i2);
         }
     }
 }
