@@ -110,7 +110,7 @@ public class SearchInRotatedSortedArrayTest {
         return search(nums, target, pivotIndex);
     }
 
-    private static int getPivotIndex(int[] nums) {
+    public static int getPivotIndex(int[] nums) {
         int start = 0;
         int end = nums.length - 1;
         if (nums[end] >= nums[start]) {
