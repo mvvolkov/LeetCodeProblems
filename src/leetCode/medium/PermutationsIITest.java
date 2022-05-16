@@ -83,6 +83,15 @@ public class PermutationsIITest {
         test(input, expected);
     }
 
+    @Test
+    public void test6() {
+        int[] input = {2, 2, 1, 1};
+        int[][] expected = {
+                {1, 1, 2, 2}, {1, 2, 1, 2}, {1, 2, 2, 1}, {2, 1, 1, 2}, {2, 1, 2, 1}, {2, 2, 1, 1}
+        };
+        test(input, expected);
+    }
+
 
     private static void test(int[] input, int[][] expected) {
         List<List<Integer>> actualList = permuteUnique(input);
