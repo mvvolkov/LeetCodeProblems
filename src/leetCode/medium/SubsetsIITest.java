@@ -102,28 +102,26 @@ public class SubsetsIITest {
     }
 
     public static List<List<Integer>> subsetsWithDup(int[] nums) {
-        HashMap<Integer, Integer> map = new HashMap<>();
+        int[] map = new int[21];
         for (int i : nums) {
-            Integer n = map.get(i);
-            if (n == null) {
-                n = 0;
-            }
-            map.put(i, n + 1);
+            map[i + 10]++;
         }
         List<List<Integer>> result = new ArrayList<>();
         result.add(List.of());
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            int key = entry.getKey();
-            int number = entry.getValue();
-            List<List<Integer>> newSubsets = new ArrayList<>();
-            for (List<Integer> list : result) {
-                List<Integer> newList = new ArrayList<>(list);
-                for (int i = 0; i < number; i++) {
-                    newList.add(key);
-                    newSubsets.add(new ArrayList<>(newList));
+        for (int i = 0; i < 21; i++) {
+            int number = map[i];
+            if (number > 0) {
+                int key = i - 10;
+                List<List<Integer>> newSubsets = new ArrayList<>();
+                for (List<Integer> list : result) {
+                    List<Integer> newList = new ArrayList<>(list);
+                    for (int k = 0; k < number; k++) {
+                        newList.add(key);
+                        newSubsets.add(new ArrayList<>(newList));
+                    }
                 }
+                result.addAll(newSubsets);
             }
-            result.addAll(newSubsets);
         }
         return result;
     }
