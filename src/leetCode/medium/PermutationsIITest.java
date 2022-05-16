@@ -121,6 +121,20 @@ public class PermutationsIITest {
     }
 
     public static List<List<Integer>> permuteUnique(int[] nums) {
+//        int[] map = new int[21];
+//        for (int i : nums) {
+//            map[i + 10]++;
+//        }
+//        List<List<Integer>> result = new ArrayList<>();
+//        result.add(List.of());
+//        for (int i = 0; i < 21; i++) {
+//            int number = map[i];
+//            if (number > 0) {
+//                int key = i - 10;
+//            }
+//
+//        }
+//        return result;
         int size = nums.length;
         List<List<Integer>> result = new ArrayList<>(size);
         List<Integer> p = intArrayToList(nums);
@@ -136,17 +150,22 @@ public class PermutationsIITest {
         permute(result, input, start + 1, size);
         for (int i = start + 1; i < size; i++) {
             List<Integer> p = swapElements(input, start, i);
-            if(!result.contains(p)){
+            if (p != null && !result.contains(p)) {
                 result.add(p);
+                permute(result, p, start + 1, size);
             }
-            permute(result, p, start + 1, size);
         }
     }
 
     private static List<Integer> swapElements(List<Integer> input, int i, int j) {
+        int iv = input.get(i);
+        int jv = input.get(j);
+        if (iv == jv) {
+            return null;
+        }
         List<Integer> result = new ArrayList<>(input);
-        result.set(i, input.get(j));
-        result.set(j, input.get(i));
+        result.set(i, jv);
+        result.set(j, iv);
         return result;
     }
 
