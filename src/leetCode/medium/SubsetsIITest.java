@@ -102,35 +102,29 @@ public class SubsetsIITest {
     }
 
     public static List<List<Integer>> subsetsWithDup(int[] nums) {
-        Set<Map<Integer, Integer>> set = new HashSet<>();
-        set.add(Map.of());
-        for (int num : nums) {
-            addSubsets(set, num);
-        }
-        List<List<Integer>> result = new ArrayList<>(set.size());
-        set.forEach(map -> {
-            List<Integer> list = new ArrayList<>();
-            map.forEach((Integer i, Integer n) -> {
-                for (int j = 0; j < n; j++) {
-                    list.add(i);
-                }
-            });
-            result.add(list);
-        });
-        return result;
-    }
-
-    private static void addSubsets(Set<Map<Integer, Integer>> result, int next) {
-        Set<Map<Integer, Integer>> newSubsets = new HashSet<>();
-        for (Map<Integer, Integer> map : result) {
-            Map<Integer, Integer> newMap = new HashMap<>(map);
-            Integer n = newMap.get(next);
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i : nums) {
+            Integer n = map.get(i);
             if (n == null) {
                 n = 0;
             }
-            newMap.put(next, n + 1);
-            newSubsets.add(newMap);
+            map.put(i, n + 1);
         }
-        result.addAll(newSubsets);
+        List<List<Integer>> result = new ArrayList<>();
+        result.add(List.of());
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            int key = entry.getKey();
+            int number = entry.getValue();
+            List<List<Integer>> newSubsets = new ArrayList<>();
+            for (List<Integer> list : result) {
+                List<Integer> newList = new ArrayList<>(list);
+                for (int i = 0; i < number; i++) {
+                    newList.add(key);
+                    newSubsets.add(new ArrayList<>(newList));
+                }
+            }
+            result.addAll(newSubsets);
+        }
+        return result;
     }
 }
