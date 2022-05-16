@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * <a href="https://leetcode.com/problems/combinations/">77. Combinations</a>
+ * <p>
+ * 77. Combinations
+ * <p>
  * Given two integers n and k, return all possible combinations of k numbers out of the range [1, n].
  * <p>
  * You may return the answer in any order.
