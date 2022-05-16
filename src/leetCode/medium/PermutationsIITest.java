@@ -143,52 +143,64 @@ public class PermutationsIITest {
     }
 
     public static List<List<Integer>> permuteUnique(int[] nums) {
-//        int[] map = new int[21];
-//        for (int i : nums) {
-//            map[i + 10]++;
-//        }
-//        List<List<Integer>> result = new ArrayList<>();
-//        result.add(List.of());
-//        for (int i = 0; i < 21; i++) {
-//            int number = map[i];
-//            if (number > 0) {
-//                int key = i - 10;
-//            }
-//
-//        }
-//        return result;
-        int size = nums.length;
-        List<List<Integer>> result = new ArrayList<>(size);
-        List<Integer> p = intArrayToList(nums);
-        result.add(p);
-        permute(result, p, 0, size);
+        int[] map = new int[21];
+        for (int i : nums) {
+            map[i + 10]++;
+        }
+        int i = nums[0] + 10;
+        int number = map[i];
+        int key = i - 10;
+        int[] permutation = new int[nums.length];
+        for (int j = 0; j < nums.length; j++) {
+            permutation[j] = 11;
+        }
+        List<int[]> permutations = new ArrayList<>();
+        makeCombinations(permutation, key, number, 0, permutations, map, new int[]{});
+        List<List<Integer>> result = new ArrayList<>();
+        for (int[] permutation1 : permutations) {
+            result.add(intArrayToList(permutation1));
+        }
         return result;
     }
 
-    private static void permute(List<List<Integer>> result, List<Integer> input, int start, int size) {
-        if (start == size - 1) {
-            return;
-        }
-        permute(result, input, start + 1, size);
-        for (int i = start + 1; i < size; i++) {
-            List<Integer> p = swapElements(input, start, i);
-            if (p != null && !result.contains(p)) {
-                result.add(p);
-                permute(result, p, start + 1, size);
+    private static void makeCombinations(int[] permutation, int key, int n, int start, List<int[]> permutations, int[] map, int[] usedKeys) {
+        for (int i = start; i < permutation.length - n + 1; i++) {
+            if (permutation[i] == 11) {
+                int[] newPermutation = new int[permutation.length];
+                System.arraycopy(permutation, 0, newPermutation, 0, permutation.length);
+                newPermutation[i] = key;
+                if (n == 1) {
+                    int[] newUsedKeys = new int[usedKeys.length + 1];
+                    System.arraycopy(usedKeys, 0, newUsedKeys, 0, usedKeys.length);
+                    newUsedKeys[usedKeys.length] = key;
+                    boolean found = false;
+                    for (int j = 0; j < 21; j++) {
+                        int n1 = map[j];
+                        if (n1 > 0) {
+                            int key1 = j - 10;
+                            boolean keyIsUsed = false;
+                            for (int usedKey : newUsedKeys) {
+                                if (key1 == usedKey) {
+                                    keyIsUsed = true;
+                                    break;
+                                }
+                            }
+                            if (!keyIsUsed) {
+                                makeCombinations(newPermutation, key1, n1, 0, permutations, map, newUsedKeys);
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!found) {
+                        permutations.add(newPermutation);
+
+                    }
+                } else {
+                    makeCombinations(newPermutation, key, n - 1, i + 1, permutations, map, usedKeys);
+                }
             }
         }
-    }
-
-    private static List<Integer> swapElements(List<Integer> input, int i, int j) {
-        int iv = input.get(i);
-        int jv = input.get(j);
-        if (iv == jv) {
-            return null;
-        }
-        List<Integer> result = new ArrayList<>(input);
-        result.set(i, jv);
-        result.set(j, iv);
-        return result;
     }
 
     private static List<Integer> intArrayToList(int[] array) {
