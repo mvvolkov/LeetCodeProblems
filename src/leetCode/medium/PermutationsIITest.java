@@ -163,38 +163,44 @@ public class PermutationsIITest {
         return result;
     }
 
+
     private static void makeCombinations(int[] permutation, int key, int n, int start, List<int[]> permutations, int[] map, int[] usedKeys) {
+
+        int nextKeyIndex = -1;
+        int[] newUsedKeys = null;
+        if (n == 1) {
+            newUsedKeys = new int[usedKeys.length + 1];
+            System.arraycopy(usedKeys, 0, newUsedKeys, 0, usedKeys.length);
+            newUsedKeys[usedKeys.length] = key;
+            for (int j = 0; j < 21; j++) {
+                int n1 = map[j];
+                if (n1 > 0) {
+                    int key1 = j - 10;
+                    boolean keyIsUsed = false;
+                    for (int usedKey : newUsedKeys) {
+                        if (key1 == usedKey) {
+                            keyIsUsed = true;
+                            break;
+                        }
+                    }
+                    if (!keyIsUsed) {
+                        nextKeyIndex = j;
+                        break;
+                    }
+                }
+            }
+        }
+
         for (int i = start; i < permutation.length - n + 1; i++) {
             if (permutation[i] == 11) {
                 int[] newPermutation = new int[permutation.length];
                 System.arraycopy(permutation, 0, newPermutation, 0, permutation.length);
                 newPermutation[i] = key;
                 if (n == 1) {
-                    int[] newUsedKeys = new int[usedKeys.length + 1];
-                    System.arraycopy(usedKeys, 0, newUsedKeys, 0, usedKeys.length);
-                    newUsedKeys[usedKeys.length] = key;
-                    boolean found = false;
-                    for (int j = 0; j < 21; j++) {
-                        int n1 = map[j];
-                        if (n1 > 0) {
-                            int key1 = j - 10;
-                            boolean keyIsUsed = false;
-                            for (int usedKey : newUsedKeys) {
-                                if (key1 == usedKey) {
-                                    keyIsUsed = true;
-                                    break;
-                                }
-                            }
-                            if (!keyIsUsed) {
-                                makeCombinations(newPermutation, key1, n1, 0, permutations, map, newUsedKeys);
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!found) {
+                    if (nextKeyIndex == -1) {
                         permutations.add(newPermutation);
-
+                    } else {
+                        makeCombinations(newPermutation, nextKeyIndex - 10, map[nextKeyIndex], 0, permutations, map, newUsedKeys);
                     }
                 } else {
                     makeCombinations(newPermutation, key, n - 1, i + 1, permutations, map, usedKeys);
