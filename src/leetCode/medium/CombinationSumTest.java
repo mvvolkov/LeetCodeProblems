@@ -116,6 +116,7 @@ public class CombinationSumTest {
 
     public static List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> result = new ArrayList<>();
+        Arrays.sort(candidates);
         combinationSum(candidates, target, result, List.of(), 0, 0);
         return result;
     }
@@ -125,7 +126,7 @@ public class CombinationSumTest {
             int value = candidates[i];
             int s = sum + value;
             if (s > target) {
-                continue;
+                break;
             }
             List<Integer> list = new ArrayList<>(currentList);
             list.add(value);
