@@ -74,6 +74,14 @@ public class CombinationSumIITest {
         test(input, target, expected);
     }
 
+    @Test
+    public void test4() {
+        int[] input = {3, 1, 3, 5, 1, 1};
+        int target = 8;
+        int[][] expected = {{1, 1, 1, 5}, {1, 1, 3, 3}, {3, 5}};
+        test(input, target, expected);
+    }
+
     private static void test(int[] candidates, int target, int[][] expected) {
 
         List<List<Integer>> actualList = combinationSum2(candidates, target);
@@ -114,29 +122,46 @@ public class CombinationSumIITest {
     public static List<List<Integer>> combinationSum2(int[] candidates, int target) {
         List<List<Integer>> result = new ArrayList<>();
         Arrays.sort(candidates);
-        combinationSum(candidates, target, result, List.of(), 0, 0);
-        return result;
-    }
-
-    private static void combinationSum(int[] candidates, int target, List<List<Integer>> result, List<Integer> currentList, int index, int sum) {
+        int[] stack = new int[candidates.length];
+        int size = 0;
+        int index = -1;
+        int sum = 0;
         int prevValue = -1;
-        for (int i = index; i < candidates.length; i++) {
-            int value = candidates[i];
-            if (prevValue == value) {
+        while (index + 1 < candidates.length || size > 0) {
+            if (index + 1 == candidates.length) {
+                index = stack[--size];
+                prevValue = candidates[index];
+                sum -= prevValue;
                 continue;
             }
-            prevValue = value;
-            int s = sum + value;
-            if (s > target) {
-                break;
+            int value = candidates[index + 1];
+            if (value == prevValue) {
+                index++;
+                continue;
             }
-            List<Integer> list = new ArrayList<>(currentList);
-            list.add(value);
-            if (s == target) {
-                result.add(list);
+            int newSum = sum + value;
+            if (newSum < target) {
+                index++;
+                stack[size++] = index;
+                sum = newSum;
+                prevValue = -1;
             } else {
-                combinationSum(candidates, target, result, list, i + 1, s);
+                if (newSum == target) {
+                    List<Integer> list = new ArrayList<>(size);
+                    for (int i = 0; i < size; i++) {
+                        list.add(candidates[stack[i]]);
+                    }
+                    list.add(value);
+                    result.add(list);
+                }
+                if (size == 0) {
+                    break;
+                }
+                index = stack[--size];
+                prevValue = candidates[index];
+                sum -= prevValue;
             }
         }
+        return result;
     }
 }
