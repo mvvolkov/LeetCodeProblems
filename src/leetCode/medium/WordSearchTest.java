@@ -149,6 +149,30 @@ public class WordSearchTest {
         test(input, word, expected);
     }
 
+    @Test
+    public void test10() {
+        char[][] input = {
+                {'C', 'A', 'A'},
+                {'A', 'A', 'A'},
+                {'B', 'C', 'D'},
+        };
+        String word = "AAB";
+        boolean expected = true;
+        test(input, word, expected);
+    }
+
+    @Test
+    public void test11() {
+        char[][] input = {
+                {'A', 'B', 'C', 'E'},
+                {'S', 'F', 'E', 'S'},
+                {'A', 'D', 'E', 'E'},
+        };
+        String word = "ABCESEEEFS";
+        boolean expected = true;
+        test(input, word, expected);
+    }
+
 
     private static void test(char[][] board, String word, boolean expected) {
         boolean actual = exist(board, word);
@@ -161,7 +185,7 @@ public class WordSearchTest {
         char[] chars = word.toCharArray();
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
-                if (findFromIndex(board, chars, i, j, 0)) {
+                if (findFromIndex(board, h, w, chars, i, j, 0)) {
                     return true;
                 }
             }
@@ -170,23 +194,26 @@ public class WordSearchTest {
     }
 
 
-    private static boolean findFromIndex(char[][] board, char[] chars, int i, int j, int index) {
-        if (i < 0 || j < 0 || i == board.length || j == board[0].length || index == chars.length) {
-            return false;
-        }
+    private static boolean findFromIndex(char[][] board, int h, int w, char[] chars, int i, int j, int index) {
+
         char c = board[i][j];
-        if (c != chars[index]) {
+        if (c != chars[index++]) {
             return false;
         }
-        index++;
         if (index == chars.length) {
             return true;
         }
         board[i][j] = '.';
-        if (findFromIndex(board, chars, i + 1, j, index) ||
-                findFromIndex(board, chars, i - 1, j, index) ||
-                findFromIndex(board, chars, i, j + 1, index) ||
-                findFromIndex(board, chars, i, j - 1, index)) {
+        if (i + 1 < h && findFromIndex(board, h, w, chars, i + 1, j, index)) {
+            return true;
+        }
+        if (i > 0 && findFromIndex(board, h, w, chars, i - 1, j, index)) {
+            return true;
+        }
+        if (j + 1 < w && findFromIndex(board, h, w, chars, i, j + 1, index)) {
+            return true;
+        }
+        if (j > 0 && findFromIndex(board, h, w, chars, i, j - 1, index)) {
             return true;
         }
         board[i][j] = c;
